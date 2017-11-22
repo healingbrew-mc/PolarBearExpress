@@ -8,7 +8,6 @@ public class Config {
     public static boolean LOADED = false;
 
     public static boolean AllowChildTaming = false;
-    public static boolean AllowTamingWithChildNearby = false;
     public static ResourceLocation TamingItem = new ResourceLocation("minecraft", "fish");
     public static int MinimumAttempts = 0;
     public static float ChancePerAttempt = 0.2f;
@@ -27,7 +26,6 @@ public class Config {
 
         if(version >= 1) {
             AllowChildTaming = config.getBoolean("allow_child_taming", "taming_behavior", Config.AllowChildTaming, "Allow child polar bears to be tamed");
-            AllowTamingWithChildNearby = config.getBoolean("allow_child_taming_proximity", "taming_behavior", Config.AllowTamingWithChildNearby, "Allow polar bears to be tamed with a child nearby");
 
             TamingItem = new ResourceLocation(config.getString("taming_item", "taming_behavior", TamingItem.toString(), "Item to tame polar bears with"));
 

@@ -40,6 +40,10 @@ public class PlayerPolarBearTameAction {
             return false;
         }
 
+        if(polarBear.isChild() && !Config.AllowChildTaming) {
+            return false;
+        }
+
         if(player.getHeldItemMainhand().getItem().getRegistryName().equals(Config.TamingItem)) {
             ITamableEntity tamableEntity = polarBear.getCapability(TamableEntityProvider.TAMABLE_ENTITY_CAPABILITY, null);
             if(tamableEntity == null) {
@@ -58,7 +62,7 @@ public class PlayerPolarBearTameAction {
             float currentAttempt = tamableEntity.getAttempts();
             tamableEntity.incrementAttempt();
             if(!player.isCreative()) {
-                player.getHeldItemMainhand().setCount(player.getHeldItemMainhand().getCount() - 1);
+                player.getHeldItemMainhand().setCount(player.getHeldItemMainhand().getCount());
             }
 
             if(currentAttempt >= Config.MinimumAttempts) {
