@@ -1,0 +1,16 @@
+[
+{
+  "modid": "polarbearexpress",
+  "name": "Polar Bear Express",
+  "description": "Ride the bear, shinji.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Naomi"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
