@@ -29,21 +29,20 @@ public class Config {
             throw new Exception("Malformed configuration file, cannot load version " + version);
         }
 
-        if(version == 1 && Objects.equals(majorBranch, "GREATWHITE")) {
+        if(version >= 1 && Objects.equals(majorBranch, "GREATWHITE")) {
             AllowChildTaming = config.getBoolean("allow_child_taming", "taming_behavior", Config.AllowChildTaming, "Allow child polar bears to be tamed");
             AllowTamingWithChildNearby = config.getBoolean("allow_child_taming_proximity", "taming_behavior", Config.AllowTamingWithChildNearby, "Allow polar bears to be tamed with a child nearby");
 
-            String[] parts = ResourceLocation.splitObjectName(config.getString("taming_item", "taming_behavior", TamingItem.toString(), "Item to tame polar bears with"));
-            TamingItem = new ResourceLocation(parts[0], parts[1]);
+            TamingItem = new ResourceLocation(config.getString("taming_item", "taming_behavior", TamingItem.toString(), "Item to tame polar bears with"));
 
             MinimumAttempts = config.getInt("minimum_attempts", "taming_behavior", Config.MinimumAttempts, 0, Integer.MAX_VALUE, "Minimum number of attempts to tame a polar bear before taming a polar bear");
             ChancePerAttempt = config.getFloat("chance", "taming_behavior", Config.ChancePerAttempt, 0.1f, 1.0f, "Allow child polar bears to be tamed");
             IncreaseOddsWithAttempt = config.getFloat("feeling_lucky", "taming_behavior", Config.IncreaseOddsWithAttempt, 0.0f, 1.0f, "Increase the odds of taming a polar bear with each attempt by this amount");
-            LOADED = true;
         } else {
             throw new Exception("Cannot resolve config loaders for version " + version + " and depot " + majorBranch);
         }
-
+        
+        LOADED = true;
         config.save();
     }
 }
