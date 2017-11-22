@@ -2,6 +2,7 @@ package dyn.healingbrew.polarbearexpress.capability.impl;
 
 import dyn.healingbrew.polarbearexpress.Config;
 import dyn.healingbrew.polarbearexpress.capability.generic.ITamableEntity;
+import jline.internal.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -10,7 +11,7 @@ import java.util.UUID;
 public class TamableEntity implements ITamableEntity {
     private UUID player = null;
     private String playerName = null;
-    private float chance;
+    private float chance = Config.ChancePerAttempt;
     private int attempts;
     private EntityPlayer cachedPlayer = null;
 
@@ -60,13 +61,14 @@ public class TamableEntity implements ITamableEntity {
     }
 
     @Override
+    @Nullable
     public UUID getUUID() {
         return player;
     }
 
     @Override
     public float getChance() {
-        return this.chance;
+        return Math.max(this.chance, Config.ChancePerAttempt);
     }
 
     @Override

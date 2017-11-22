@@ -1,5 +1,6 @@
 package dyn.healingbrew.polarbearexpress;
 
+import dyn.healingbrew.polarbearexpress.behavior.BehaviorListener;
 import dyn.healingbrew.polarbearexpress.capability.CapabilityRegistry;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -25,6 +26,7 @@ public class PolarBearExpress
     {
         Config.Load(new Configuration(event.getSuggestedConfigurationFile()));
         CapabilityRegistry.Register();
+        BehaviorListener.Register();
     }
 
     @EventHandler

@@ -2,6 +2,7 @@ package dyn.healingbrew.polarbearexpress.capability.generic;
 
 import net.minecraft.entity.player.EntityPlayer;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
@@ -15,6 +16,7 @@ public interface ITamableEntity {
 
     EntityPlayer getOwner();
     String getName();
+    @Nullable
     UUID getUUID();
     float getChance();
     int getAttempts();
