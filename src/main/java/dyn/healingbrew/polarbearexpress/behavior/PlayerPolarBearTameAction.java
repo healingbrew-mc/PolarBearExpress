@@ -3,15 +3,24 @@ package dyn.healingbrew.polarbearexpress.behavior;
 import dyn.healingbrew.polarbearexpress.Config;
 import dyn.healingbrew.polarbearexpress.capability.generic.ITamableEntity;
 import dyn.healingbrew.polarbearexpress.capability.provider.TamableEntityProvider;
-import net.minecraft.client.Minecraft;
+import dyn.healingbrew.polarbearexpress.net.NetworkHandler;
+import dyn.healingbrew.polarbearexpress.net.message.SpawnParticlesMessage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 @SuppressWarnings({"ConstantConditions", "unused", "WeakerAccess"})
 public class PlayerPolarBearTameAction {
-    private static void TameEffect(boolean success, Entity entity) {
+    public static void TameEffect(boolean success, Entity entity) {
+        World world = entity.getEntityWorld();
+        if(!world.isRemote) {
+            NetworkHandler.ChannelClient.sendToAllAround(new SpawnParticlesMessage(entity, success), new NetworkRegistry.TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 6));
+            return;
+        }
+
         EnumParticleTypes enumparticletypes = EnumParticleTypes.HEART;
 
         if (!success) {
@@ -19,10 +28,10 @@ public class PlayerPolarBearTameAction {
         }
 
         for (int i = 0; i < 7; ++i) {
-            double d0 = entity.world.rand.nextGaussian() * 0.02D;
-            double d1 = entity.world.rand.nextGaussian() * 0.02D;
-            double d2 = entity.world.rand.nextGaussian() * 0.02D;
-            entity.world.spawnParticle(enumparticletypes, entity.posX + (double) (entity.world.rand.nextFloat() * entity.width * 2.0F) - (double) entity.width, entity.posY + 0.5D + (double) (entity.world.rand.nextFloat() * entity.height), entity.posZ + (double) (entity.world.rand.nextFloat() * entity.width * 2.0F) - (double) entity.width, d0, d1, d2);
+            double d0 = world.rand.nextGaussian() * 0.02D;
+            double d1 = world.rand.nextGaussian() * 0.02D;
+            double d2 = world.rand.nextGaussian() * 0.02D;
+            world.spawnParticle(enumparticletypes, entity.posX + (double) (world.rand.nextFloat() * entity.width * 2.0F) - (double) entity.width, entity.posY + 0.5D + (double) (world.rand.nextFloat() * entity.height), entity.posZ + (double) (world.rand.nextFloat() * entity.width * 2.0F) - (double) entity.width, d0, d1, d2);
         }
     }
 
@@ -53,7 +62,7 @@ public class PlayerPolarBearTameAction {
             }
 
             if(currentAttempt >= Config.MinimumAttempts) {
-                float chance = Minecraft.getMinecraft().world.rand.nextFloat();
+                float chance = player.getEntityWorld().rand.nextFloat();
                 if(currentChance >= chance) {
                     polarBear.setHealth(polarBear.getMaxHealth());
                     tamableEntity.setOwner(player);

@@ -5,6 +5,7 @@ import dyn.healingbrew.polarbearexpress.capability.generic.ITamableEntity;
 import jline.internal.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.UUID;
 
@@ -50,7 +51,7 @@ public class TamableEntity implements ITamableEntity {
     @Override
     public EntityPlayer getOwner() {
         if(cachedPlayer == null) {
-            cachedPlayer = Minecraft.getMinecraft().world.getPlayerEntityByUUID(player);
+            cachedPlayer = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld().getPlayerEntityByUUID(player);
         }
         return cachedPlayer;
     }
