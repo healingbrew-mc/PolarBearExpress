@@ -22,14 +22,13 @@ public class Config {
     public static void Load(Configuration config) throws Exception {
         CONFIG = config;
 
-        int version = config.getInt("VERSION", "PBX", 1, 0, Integer.MAX_VALUE, "Don't edit this, used to keep track of config versions");
-        String majorBranch = config.getString("DEPOT", "PBX", "GREATWHITE", "Don't edit this, used to keep track of config versions");
+        int version = config.getInt("version", "healingbrew", 1, 0, Integer.MAX_VALUE, "Don't edit this, used to keep track of config versions");
 
-        if(version > 1 || !Collections.singletonList("GREATWHITE").contains(majorBranch)) {
+        if(version > 1) {
             throw new Exception("Malformed configuration file, cannot load version " + version);
         }
 
-        if(version >= 1 && Objects.equals(majorBranch, "GREATWHITE")) {
+        if(version >= 1) {
             AllowChildTaming = config.getBoolean("allow_child_taming", "taming_behavior", Config.AllowChildTaming, "Allow child polar bears to be tamed");
             AllowTamingWithChildNearby = config.getBoolean("allow_child_taming_proximity", "taming_behavior", Config.AllowTamingWithChildNearby, "Allow polar bears to be tamed with a child nearby");
 
@@ -39,9 +38,9 @@ public class Config {
             ChancePerAttempt = config.getFloat("chance", "taming_behavior", Config.ChancePerAttempt, 0.1f, 1.0f, "Allow child polar bears to be tamed");
             IncreaseOddsWithAttempt = config.getFloat("feeling_lucky", "taming_behavior", Config.IncreaseOddsWithAttempt, 0.0f, 1.0f, "Increase the odds of taming a polar bear with each attempt by this amount");
         } else {
-            throw new Exception("Cannot resolve config loaders for version " + version + " and depot " + majorBranch);
+            throw new Exception("Cannot resolve config loaders for version " + version);
         }
-        
+
         LOADED = true;
         config.save();
     }
