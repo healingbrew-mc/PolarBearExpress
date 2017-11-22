@@ -3,9 +3,6 @@ package dyn.healingbrew.polarbearexpress;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 
-import java.util.Collections;
-import java.util.Objects;
-
 @SuppressWarnings({"WeakerAccess"})
 public class Config {
     public static boolean LOADED = false;
