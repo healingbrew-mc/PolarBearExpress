@@ -1,4 +1,4 @@
-package dyn.healingbrew.polarbearexpress.capability.generic;
+package dyn.healingbrew.polarbearexpress.common.capability.generic;
 
 import net.minecraft.entity.player.EntityPlayer;
 

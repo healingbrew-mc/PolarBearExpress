@@ -1,7 +1,7 @@
-package dyn.healingbrew.polarbearexpress.ai;
+package dyn.healingbrew.polarbearexpress.common.ai;
 
-import dyn.healingbrew.polarbearexpress.capability.generic.ITamableEntity;
-import dyn.healingbrew.polarbearexpress.capability.provider.TamableEntityProvider;
+import dyn.healingbrew.polarbearexpress.common.capability.generic.ITamableEntity;
+import dyn.healingbrew.polarbearexpress.common.capability.provider.TamableEntityProvider;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITarget;

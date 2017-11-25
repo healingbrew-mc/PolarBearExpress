@@ -4,24 +4,39 @@ buildscript {
         maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: "net.minecraftforge.gradle.forge"
 
-version = "1.0"
+ext.build_rev = 0
+if(System.getenv("BUILD_REV") != null) {
+    project.build_rev = System.getenv("BUILD_REV")
+}
+
+version = "${minecraft_version}-${mod_version}.${build_rev}"
 group = "dyn.healingbrew.polarbearexpress"
 archivesBaseName = "polarbearexpress"
 
-sourceCompatibility = targetCompatibility = '1.8'
+sourceCompatibility = targetCompatibility = "1.8"
 compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
+    sourceCompatibility = targetCompatibility = "1.8"
 }
 
 minecraft {
-    version = "1.12.2-14.23.0.2542"
+    version = "${minecraft_version}-${forge_version}"
     runDir = "run"
     mappings = "snapshot_20171003"
+
+    replace "@VERSION@", project.version
+    replaceIn "PolarBearExpress.java"
+}
+
+jar {
+    manifest {
+        attributes "FMLCorePlugin": "dyn.healingbrew.polarbearexpress.core.HBPlugin"
+        attributes "FMLCorePluginContainsFMLMod": true
+    }
 }
 
 dependencies {
@@ -32,12 +47,12 @@ processResources {
     inputs.property "mcversion", project.minecraft.version
 
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
+        include "mcmod.info"
 		
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand "version":project.version, "mcversion":project.minecraft.version
     }
 
     from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+        exclude "mcmod.info"
     }
 }

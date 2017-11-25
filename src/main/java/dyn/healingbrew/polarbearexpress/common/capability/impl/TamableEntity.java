@@ -1,9 +1,8 @@
-package dyn.healingbrew.polarbearexpress.capability.impl;
+package dyn.healingbrew.polarbearexpress.common.capability.impl;
 
 import dyn.healingbrew.polarbearexpress.Config;
-import dyn.healingbrew.polarbearexpress.capability.generic.ITamableEntity;
+import dyn.healingbrew.polarbearexpress.common.capability.generic.ITamableEntity;
 import jline.internal.Nullable;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
