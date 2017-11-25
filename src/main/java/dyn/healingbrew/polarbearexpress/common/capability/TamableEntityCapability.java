@@ -1,7 +1,7 @@
-package dyn.healingbrew.polarbearexpress.capability;
+package dyn.healingbrew.polarbearexpress.common.capability;
 
-import dyn.healingbrew.polarbearexpress.capability.data.TamableEntityNBT;
-import dyn.healingbrew.polarbearexpress.capability.generic.ITamableEntity;
+import dyn.healingbrew.polarbearexpress.common.capability.data.TamableEntityNBT;
+import dyn.healingbrew.polarbearexpress.common.capability.generic.ITamableEntity;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;

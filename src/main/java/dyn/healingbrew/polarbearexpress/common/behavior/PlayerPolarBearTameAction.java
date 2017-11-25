@@ -1,10 +1,10 @@
-package dyn.healingbrew.polarbearexpress.behavior;
+package dyn.healingbrew.polarbearexpress.common.behavior;
 
 import dyn.healingbrew.polarbearexpress.Config;
-import dyn.healingbrew.polarbearexpress.capability.generic.ITamableEntity;
-import dyn.healingbrew.polarbearexpress.capability.provider.TamableEntityProvider;
-import dyn.healingbrew.polarbearexpress.net.NetworkHandler;
-import dyn.healingbrew.polarbearexpress.net.message.SpawnParticlesMessage;
+import dyn.healingbrew.polarbearexpress.common.capability.generic.ITamableEntity;
+import dyn.healingbrew.polarbearexpress.common.capability.provider.TamableEntityProvider;
+import dyn.healingbrew.polarbearexpress.common.net.NetworkHandler;
+import dyn.healingbrew.polarbearexpress.common.net.message.SpawnParticlesMessage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.player.EntityPlayer;

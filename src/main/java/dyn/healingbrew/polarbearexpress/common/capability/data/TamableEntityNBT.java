@@ -1,6 +1,6 @@
-package dyn.healingbrew.polarbearexpress.capability.data;
+package dyn.healingbrew.polarbearexpress.common.capability.data;
 
-import dyn.healingbrew.polarbearexpress.capability.generic.ITamableEntity;
+import dyn.healingbrew.polarbearexpress.common.capability.generic.ITamableEntity;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 

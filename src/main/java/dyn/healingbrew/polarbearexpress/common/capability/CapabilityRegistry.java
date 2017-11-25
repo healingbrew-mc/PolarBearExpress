@@ -1,9 +1,9 @@
-package dyn.healingbrew.polarbearexpress.capability;
+package dyn.healingbrew.polarbearexpress.common.capability;
 
 import dyn.healingbrew.polarbearexpress.PolarBearExpress;
-import dyn.healingbrew.polarbearexpress.capability.generic.ITamableEntity;
-import dyn.healingbrew.polarbearexpress.capability.impl.TamableEntity;
-import dyn.healingbrew.polarbearexpress.capability.provider.TamableEntityProvider;
+import dyn.healingbrew.polarbearexpress.common.capability.generic.ITamableEntity;
+import dyn.healingbrew.polarbearexpress.common.capability.impl.TamableEntity;
+import dyn.healingbrew.polarbearexpress.common.capability.provider.TamableEntityProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.util.ResourceLocation;

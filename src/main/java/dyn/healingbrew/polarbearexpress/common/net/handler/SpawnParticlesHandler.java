@@ -1,7 +1,7 @@
-package dyn.healingbrew.polarbearexpress.net.handler;
+package dyn.healingbrew.polarbearexpress.common.net.handler;
 
-import dyn.healingbrew.polarbearexpress.behavior.PlayerPolarBearTameAction;
-import dyn.healingbrew.polarbearexpress.net.message.SpawnParticlesMessage;
+import dyn.healingbrew.polarbearexpress.common.behavior.PlayerPolarBearTameAction;
+import dyn.healingbrew.polarbearexpress.common.net.message.SpawnParticlesMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

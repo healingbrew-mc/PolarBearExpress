@@ -1,6 +1,6 @@
-package dyn.healingbrew.polarbearexpress.behavior;
+package dyn.healingbrew.polarbearexpress.common.behavior;
 
-import dyn.healingbrew.polarbearexpress.ai.*;
+import dyn.healingbrew.polarbearexpress.common.ai.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.passive.EntityLlama;

@@ -1,4 +1,4 @@
-package dyn.healingbrew.polarbearexpress.ai;
+package dyn.healingbrew.polarbearexpress.common.ai;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIWander;
