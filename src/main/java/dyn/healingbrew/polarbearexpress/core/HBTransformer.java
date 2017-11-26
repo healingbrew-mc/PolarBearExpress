@@ -1,6 +1,5 @@
 package dyn.healingbrew.polarbearexpress.core;
 
-import com.sun.org.apache.bcel.internal.generic.ICONST;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 import static net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
@@ -13,7 +12,14 @@ import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
+import org.objectweb.asm.util.TraceMethodVisitor;
 import org.objectweb.asm.tree.*;
+import org.objectweb.asm.util.Printer;
+import org.objectweb.asm.util.Textifier;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
 
 @SuppressWarnings("unused WeakerAccess")
 @MCVersion(MinecraftForge.MC_VERSION)
@@ -48,11 +54,27 @@ public class HBTransformer implements IClassTransformer {
     static final String entityPolarBear_Class = "net.minecraft.entity.monster.EntityPolarBear";
     static final SafeName obf_getControllingPassenger = new SafeName("getControllingPassenger", "func_184179_bs");
     static final SafeName obf_canBeSteered = new SafeName("canBeSteered", "func_82171_bF");
+    static final SafeName obf_travel = new SafeName("travel", "func_191986_a");
+
+    private static Printer textifier = new Textifier();
+    private static TraceMethodVisitor tmv = new TraceMethodVisitor(textifier);
+
+    public void DumpASM(MethodNode n) {
+        for(int i = 0; i < n.instructions.size(); ++i) {
+            AbstractInsnNode insn = n.instructions.get(i);
+            insn.accept(tmv);
+            StringWriter sw = new StringWriter();
+            textifier.print(new PrintWriter(sw));
+            textifier.getText().clear();
+            logger.info(sw.toString().trim());
+        }
+        logger.info("");
+    }
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         if(entityPolarBear_Class.equals(transformedName)) {
-            logger.info(String.format("Attempting to transform %s", transformedName));
+            logger.info(String.format("Attempting to transform %s, will dump assembly code", transformedName));
 
             byte[] theBytes = basicClass;
 
@@ -78,7 +100,7 @@ public class HBTransformer implements IClassTransformer {
                 ClassReader classReader = new ClassReader(theBytes);
                 classReader.accept(classNode, 0);
 
-                MethodNode n = new MethodNode(ASM4, ACC_PUBLIC,
+                MethodNode n = new MethodNode(ASM5, ACC_PUBLIC,
                         deObf ? obf_canBeSteered.deobf : obf_canBeSteered.obf, "()Z",
                         null, null);
 
@@ -89,10 +111,11 @@ public class HBTransformer implements IClassTransformer {
 
                 classNode.methods.add(n);
 
-                ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+                ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
                 classNode.accept(cw);
 
                 logger.info(String.format("Tranformed, added %s.%s overriding super (%s)", transformedName, deObf ? obf_canBeSteered.deobf : obf_canBeSteered.obf, obf_canBeSteered.deobf));
+                DumpASM(n);
                 theBytes = cw.toByteArray();
             }
 
@@ -102,9 +125,12 @@ public class HBTransformer implements IClassTransformer {
                 ClassReader classReader = new ClassReader(theBytes);
                 classReader.accept(classNode, 0);
 
-                MethodNode n = new MethodNode(ASM4, ACC_PUBLIC,
-                        deObf ? obf_getControllingPassenger.deobf : obf_getControllingPassenger.obf, "()Z",
+                MethodNode n = new MethodNode(ASM5, ACC_PUBLIC,
+                        deObf ? obf_getControllingPassenger.deobf : obf_getControllingPassenger.obf, "()Lnet/minecraft/entity/Entity;",
                         null, null);
+
+                n.visibleAnnotations = new ArrayList<>();
+                n.visibleAnnotations.add(new AnnotationNode("Ljavax/annotation/Nullable;"));
 
                 n.instructions = new InsnList();
 
@@ -114,21 +140,80 @@ public class HBTransformer implements IClassTransformer {
                 // Entity superEntity = super.getControllingPassenger();
                 // retrun dyn.healingbrew.polarbearexpress.core.transform.HBMethod.getControllingPassenger(this);
                 n.instructions.add(new VarInsnNode(ALOAD, 0)); // load this into ref
+                n.instructions.add(new MethodInsnNode(INVOKESPECIAL,
+                        "net/minecraft/entity/passive/EntityAnimal",
+                        deObf ? obf_getControllingPassenger.deobf : obf_getControllingPassenger.obf,
+                        "()Lnet/minecraft/entity/Entity;", false)); // call super.getControllingPassenger
+                n.instructions.add(new VarInsnNode(ASTORE, 1)); // save result
+                n.instructions.add(new VarInsnNode(ALOAD, 1)); // load result into ref
+                n.instructions.add(new JumpInsnNode(IFNONNULL, L1)); // jump to L1 if ref is non null
+                n.instructions.add(new VarInsnNode(ALOAD, 0)); // load this into ref
                 n.instructions.add(new MethodInsnNode(INVOKESTATIC,
                         "dyn/healingbrew/polarbearexpress/core/transform/HBMethod",
                         "getControllingPassenger",
-                        "(Lnet/minecraft/entity/Entity;)Z", false)); // call GBMethod.getControllingPassenger
-                n.instructions.add(new InsnNode(IRETURN)); // return stack
+                        "(Lnet/minecraft/entity/Entity;)Lnet/minecraft/entity/Entity;", false)); // call HBMethod.getControllingPassenger
+                n.instructions.add(new JumpInsnNode(GOTO, L2)); // jump to L2
+                n.instructions.add(L1);
+                n.instructions.add(new VarInsnNode(ALOAD, 1)); // load into ref
+                n.instructions.add(L2);
+                n.instructions.add(new InsnNode(ARETURN)); // return stack
 
                 classNode.methods.add(n);
 
-                ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+                ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
                 classNode.accept(cw);
 
                 logger.info(String.format("Tranformed, added %s.%s overriding super (%s)", transformedName, deObf ? obf_getControllingPassenger.deobf : obf_getControllingPassenger.obf, obf_getControllingPassenger.deobf));
-
+                DumpASM(n);
                 theBytes = cw.toByteArray();
             }
+
+            // block travel
+            {
+                ClassNode classNode = new ClassNode();
+                ClassReader classReader = new ClassReader(theBytes);
+                classReader.accept(classNode, 0);
+
+                MethodNode n = new MethodNode(ASM5, ACC_PUBLIC,
+                        deObf ? obf_travel.deobf : obf_travel.obf, "(FFF)V",
+                        null, null);
+
+                // if(!HBMethod.travel(this, arg1, arg2, arg3)) { super.travel(arg1, arg2, arg3); }
+                n.instructions = new InsnList();
+
+                LabelNode L1 = new LabelNode(new Label());
+
+                n.instructions.add(new VarInsnNode(ALOAD, 0)); // Load this into stack
+                n.instructions.add(new VarInsnNode(FLOAD, 1)); // Load arg 1 into stack
+                n.instructions.add(new VarInsnNode(FLOAD, 2)); // Load arg 2 into stack
+                n.instructions.add(new VarInsnNode(FLOAD, 3)); // Load arg 3 into stack
+                n.instructions.add(new MethodInsnNode(INVOKESTATIC,
+                        "dyn/healingbrew/polarbearexpress/core/transform/HBMethod",
+                        "travel",
+                        "(Lnet/minecraft/entity/Entity;FFF)Z", false)); // call GBMethod.getControllingPassenger
+                n.instructions.add(new JumpInsnNode(IFNE, L1)); // jump to L1
+                n.instructions.add(new VarInsnNode(ALOAD, 0)); // Load this into stack
+                n.instructions.add(new VarInsnNode(FLOAD, 1)); // Load arg 1 into stack
+                n.instructions.add(new VarInsnNode(FLOAD, 2)); // Load arg 2 into stack
+                n.instructions.add(new VarInsnNode(FLOAD, 3)); // Load arg 3 into stack
+                n.instructions.add(new MethodInsnNode(INVOKESPECIAL,
+                        "net/minecraft/entity/passive/EntityAnimal",
+                        deObf ? obf_travel.deobf : obf_travel.obf,
+                        "(FFF)V", false)); // call super.travel
+                n.instructions.add(L1);
+                n.instructions.add(new InsnNode(RETURN)); // return
+
+                classNode.methods.add(n);
+
+                ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+                classNode.accept(cw);
+
+                logger.info(String.format("Tranformed, added %s.%s overriding super (%s)", transformedName, deObf ? obf_travel.deobf : obf_travel.obf, obf_travel.deobf));
+                DumpASM(n);
+                theBytes = cw.toByteArray();
+            }
+
+            logger.info("All done!");
 
             return theBytes;
         }

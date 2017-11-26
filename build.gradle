@@ -32,6 +32,10 @@ minecraft {
     replaceIn "PolarBearExpress.java"
 }
 
+runClient {
+    jvmArgs "-Dfml.coreMods.load=dyn.healingbrew.polarbearexpress.core.HBPlugin"
+}
+
 jar {
     manifest {
         attributes "FMLCorePlugin": "dyn.healingbrew.polarbearexpress.core.HBPlugin"

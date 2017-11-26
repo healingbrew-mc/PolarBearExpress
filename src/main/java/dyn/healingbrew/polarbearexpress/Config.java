@@ -8,6 +8,7 @@ public class Config {
     public static boolean LOADED = false;
 
     public static boolean AllowChildTaming = false;
+    public static boolean AllowSharing = false;
     public static ResourceLocation TamingItem = new ResourceLocation("minecraft", "fish");
     public static int MinimumAttempts = 0;
     public static float ChancePerAttempt = 0.2f;
@@ -26,6 +27,7 @@ public class Config {
 
         if(version >= 1) {
             AllowChildTaming = config.getBoolean("allow_child_taming", "taming_behavior", Config.AllowChildTaming, "Allow child polar bears to be tamed");
+            AllowSharing = config.getBoolean("allow_sharing", "taming_behavior", Config.AllowSharing, "Allow other people to mount bears you've tamed");
 
             TamingItem = new ResourceLocation(config.getString("taming_item", "taming_behavior", TamingItem.toString(), "Item to tame polar bears with"));
 

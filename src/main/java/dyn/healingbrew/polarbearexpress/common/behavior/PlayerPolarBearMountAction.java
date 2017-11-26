@@ -1,5 +1,6 @@
 package dyn.healingbrew.polarbearexpress.common.behavior;
 
+import dyn.healingbrew.polarbearexpress.Config;
 import dyn.healingbrew.polarbearexpress.common.capability.generic.ITamableEntity;
 import dyn.healingbrew.polarbearexpress.common.capability.provider.TamableEntityProvider;
 import net.minecraft.entity.monster.EntityPolarBear;
@@ -18,13 +19,16 @@ public class PlayerPolarBearMountAction {
                 return false;
             }
 
-            if(player.getPersistentID() != tamableEntity.getUUID()) {
+            if(!Config.AllowSharing && player.getPersistentID() != tamableEntity.getUUID()) {
                 return false;
             }
 
             if(!actualWork) {
                 return true;
             }
+
+            player.rotationYaw = polarBear.rotationYaw;
+            player.rotationPitch = polarBear.rotationPitch;
 
             return player.startRiding(polarBear);
         }
