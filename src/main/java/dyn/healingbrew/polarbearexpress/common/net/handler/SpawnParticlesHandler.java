@@ -13,9 +13,10 @@ public class SpawnParticlesHandler implements IMessageHandler<SpawnParticlesMess
     @Override
     public IMessage onMessage(SpawnParticlesMessage message, MessageContext ctx) {
         Minecraft minecraft = Minecraft.getMinecraft();
-
-        Entity entity = minecraft.world.getEntityByID(message.entity);
-
+        Entity entity = minecraft.player.world.getEntityByID(message.entity);  // should be local world anyway
+        if(entity == null) {
+            return null;
+        }
         minecraft.addScheduledTask(() -> PlayerPolarBearTameAction.TameEffect(message.success, entity));
         return null;
     }

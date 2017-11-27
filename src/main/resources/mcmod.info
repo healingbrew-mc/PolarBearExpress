@@ -7,8 +7,8 @@
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["Naomi"],
-  "credits": "",
+  "authorList": ["HealingBrew"],
+  "credits": "Healing Brew for code, EnderIO team for instructing me on Java Bytecode Assembly",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []

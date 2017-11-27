@@ -1,16 +1,20 @@
 package dyn.healingbrew.polarbearexpress.common.behavior;
 
 import dyn.healingbrew.polarbearexpress.common.ai.*;
+import dyn.healingbrew.polarbearexpress.common.capability.generic.ITamableEntity;
+import dyn.healingbrew.polarbearexpress.common.capability.provider.TamableEntityProvider;
+import dyn.healingbrew.polarbearexpress.common.net.NetworkHandler;
+import dyn.healingbrew.polarbearexpress.common.net.message.TamableCapabilitySyncMessage;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityPolarBear;
-import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "ConstantConditions"})
 public class BehaviorListener {
     public static void Register() {
         MinecraftForge.EVENT_BUS.register(new BehaviorListener());
@@ -18,12 +22,14 @@ public class BehaviorListener {
 
     @SubscribeEvent
     public void EntitySpawn(EntityJoinWorldEvent event) {
-        if(event.getEntity().world.isRemote) {
-            return;
-        }
-
         if (event.getEntity() instanceof EntityPolarBear) {
             EntityPolarBear bear = (EntityPolarBear) event.getEntity();
+
+            bear.stepHeight = 1.0F;
+
+            if(event.getEntity().world.isRemote) {
+                return;
+            }
 
             EntityAIBase AIMeleeAttack = null;
             for (EntityAITasks.EntityAITaskEntry ai : bear.tasks.taskEntries) {
@@ -34,7 +40,7 @@ public class BehaviorListener {
             }
 
             if (AIMeleeAttack == null) {
-                System.err.println("Warning: cannot find AIMeleeAttack AI in polar bear " + AIMeleeAttack);
+                System.err.println("Warning: cannot find AIMeleeAttack AI in polar bear");
             }
 
             bear.tasks.taskEntries.clear();
@@ -43,10 +49,8 @@ public class BehaviorListener {
                 bear.tasks.addTask(1, AIMeleeAttack);
             }
             bear.tasks.addTask(2, new AIFollowOwner(bear, 1.0D, 10.0F, 2.0F));
-            bear.tasks.addTask(3, new AIWander(bear, 1.0D));
-            bear.tasks.addTask(3, new EntityAIFollowParent(bear, 1.25D));
-            bear.tasks.addTask(4, new EntityAIWatchClosest(bear, EntityPlayer.class, 6.0F));
-            bear.tasks.addTask(4, new EntityAIWatchClosest(bear, EntityLlama.class, 6.0F));
+            bear.tasks.addTask(4, new AIWander(bear, 1.0D));
+            bear.tasks.addTask(4, new EntityAIFollowParent(bear, 1.25D));
             bear.tasks.addTask(5, new EntityAILookIdle(bear));
 
             bear.targetTasks.taskEntries.clear();
@@ -66,6 +70,12 @@ public class BehaviorListener {
         if (event.getTarget() instanceof EntityPolarBear) {
             EntityPolarBear bear = (EntityPolarBear) event.getTarget();
             EntityPlayer player = event.getEntityPlayer();
+
+            ITamableEntity tamableEntity = bear.getCapability(TamableEntityProvider.TAMABLE_ENTITY_CAPABILITY, null);
+
+            if (player instanceof EntityPlayerMP && !player.world.isRemote) {
+                NetworkHandler.ChannelClient.sendTo(new TamableCapabilitySyncMessage(tamableEntity, bear), (EntityPlayerMP) player);
+            }
 
             if (PlayerPolarBearMountAction.doWork(player, bear, false)) {
                 event.setCanceled(PlayerPolarBearMountAction.doWork(player, bear, true));

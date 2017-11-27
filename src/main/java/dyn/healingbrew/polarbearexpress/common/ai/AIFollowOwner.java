@@ -51,12 +51,15 @@ public class AIFollowOwner extends EntityAIBase {
      * Returns whether the EntityAIBase should begin execution.
      */
     public boolean shouldExecute() {
-
         if (this.getCapability().getUUID() == null) {
             return false;
         }
 
         EntityLivingBase entitylivingbase = this.getCapability().getOwner();
+
+        if(entitylivingbase == null) {
+            return false;
+        }
 
         if (entitylivingbase instanceof EntityPlayer && ((EntityPlayer) entitylivingbase).isSpectator()) {
             return false;

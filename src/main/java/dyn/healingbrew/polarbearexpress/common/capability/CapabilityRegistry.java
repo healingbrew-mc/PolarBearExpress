@@ -15,10 +15,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class CapabilityRegistry {
     public static void Register() {
-        CapabilityManager.INSTANCE.register(ITamableEntity.class, new TamableEntityCapability(), TamableEntity.class);
+        CapabilityManager.INSTANCE.register(ITamableEntity.class, TAMABLE_ENTITY_CAPABILITY_IO, TamableEntity.class);
         MinecraftForge.EVENT_BUS.register(new CapabilityRegistry());
     }
 
+    public static final TamableEntityCapability TAMABLE_ENTITY_CAPABILITY_IO = new TamableEntityCapability();
     public static final ResourceLocation TAMABLE_ENTITY_CAPABILITY = new ResourceLocation(PolarBearExpress.MODID, "tamable_entity_capability");
 
     @SubscribeEvent

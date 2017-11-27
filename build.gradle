@@ -32,6 +32,22 @@ minecraft {
     replaceIn "PolarBearExpress.java"
 }
 
+task signJar(type: SignJar, dependsOn: reobfJar) {
+    inputFile = jar.archiveName
+    outputFile = jar.archiveName
+
+    keyStore = System.getenv("FMLSIGN_KEYSTORE")
+    alias = System.getenv("FMLSIGN_ALIAS")
+    storePass = System.getenv("FMLSIGN_STOREPASS")
+    keyPass = System.getenv("FMLSIGN_KEYPASS")
+}
+
+if(System.getenv("FMLSIGN_KEYSTORE") != null && System.getenv("FMLSIGN_ALIAS") != null &&
+        System.getenv("FMLSIGN_STOREPASS") != null && System.getenv("FMLSIGN_KEYPASS") != null) {
+    build.dependsOn signJar
+    System.out.println("Enabling signing");
+}
+
 runClient {
     jvmArgs "-Dfml.coreMods.load=dyn.healingbrew.polarbearexpress.core.HBPlugin"
 }

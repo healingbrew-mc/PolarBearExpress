@@ -55,6 +55,8 @@ public class HBTransformer implements IClassTransformer {
     static final SafeName obf_getControllingPassenger = new SafeName("getControllingPassenger", "func_184179_bs");
     static final SafeName obf_canBeSteered = new SafeName("canBeSteered", "func_82171_bF");
     static final SafeName obf_travel = new SafeName("travel", "func_191986_a");
+    static final SafeName obf_getJumpUpwardsMotion = new SafeName("getJumpUpwardsMotion", "func_175134_bD");
+
 
     private static Printer textifier = new Textifier();
     private static TraceMethodVisitor tmv = new TraceMethodVisitor(textifier);
@@ -119,6 +121,31 @@ public class HBTransformer implements IClassTransformer {
                 theBytes = cw.toByteArray();
             }
 
+            // block getJumpUpwardsMotion
+            {
+                ClassNode classNode = new ClassNode();
+                ClassReader classReader = new ClassReader(theBytes);
+                classReader.accept(classNode, 0);
+
+                MethodNode n = new MethodNode(ASM5, ACC_PUBLIC,
+                        deObf ? obf_getJumpUpwardsMotion.deobf : obf_getJumpUpwardsMotion.obf, "()F",
+                        null, null);
+
+                // return 0.84F;
+                n.instructions = new InsnList();
+                n.instructions.add(new LdcInsnNode(0.58F)); // Load true into stack
+                n.instructions.add(new InsnNode(FRETURN)); // return stack
+
+                classNode.methods.add(n);
+
+                ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+                classNode.accept(cw);
+
+                logger.info(String.format("Tranformed, added %s.%s overriding super (%s)", transformedName, deObf ? obf_getJumpUpwardsMotion.deobf : obf_getJumpUpwardsMotion.obf, obf_getJumpUpwardsMotion.deobf));
+                DumpASM(n);
+                theBytes = cw.toByteArray();
+            }
+
             // block getControllingPassenger
             {
                 ClassNode classNode = new ClassNode();
@@ -138,7 +165,7 @@ public class HBTransformer implements IClassTransformer {
                 LabelNode L2 = new LabelNode(new Label());
 
                 // Entity superEntity = super.getControllingPassenger();
-                // retrun dyn.healingbrew.polarbearexpress.core.transform.HBMethod.getControllingPassenger(this);
+                // retrun super.getControllingPassenger() ?? dyn.healingbrew.polarbearexpress.core.transform.HBMethod.getControllingPassenger(this);
                 n.instructions.add(new VarInsnNode(ALOAD, 0)); // load this into ref
                 n.instructions.add(new MethodInsnNode(INVOKESPECIAL,
                         "net/minecraft/entity/passive/EntityAnimal",
@@ -149,7 +176,7 @@ public class HBTransformer implements IClassTransformer {
                 n.instructions.add(new JumpInsnNode(IFNONNULL, L1)); // jump to L1 if ref is non null
                 n.instructions.add(new VarInsnNode(ALOAD, 0)); // load this into ref
                 n.instructions.add(new MethodInsnNode(INVOKESTATIC,
-                        "dyn/healingbrew/polarbearexpress/core/transform/HBMethod",
+                        "dyn/healingbrew/polarbearexpress/core/HBMethod",
                         "getControllingPassenger",
                         "(Lnet/minecraft/entity/Entity;)Lnet/minecraft/entity/Entity;", false)); // call HBMethod.getControllingPassenger
                 n.instructions.add(new JumpInsnNode(GOTO, L2)); // jump to L2
@@ -168,7 +195,7 @@ public class HBTransformer implements IClassTransformer {
                 theBytes = cw.toByteArray();
             }
 
-            // block travel
+            // block travel-
             {
                 ClassNode classNode = new ClassNode();
                 ClassReader classReader = new ClassReader(theBytes);
@@ -188,14 +215,20 @@ public class HBTransformer implements IClassTransformer {
                 n.instructions.add(new VarInsnNode(FLOAD, 2)); // Load arg 2 into stack
                 n.instructions.add(new VarInsnNode(FLOAD, 3)); // Load arg 3 into stack
                 n.instructions.add(new MethodInsnNode(INVOKESTATIC,
-                        "dyn/healingbrew/polarbearexpress/core/transform/HBMethod",
+                        "dyn/healingbrew/polarbearexpress/core/HBMethod",
                         "travel",
-                        "(Lnet/minecraft/entity/Entity;FFF)Z", false)); // call GBMethod.getControllingPassenger
-                n.instructions.add(new JumpInsnNode(IFNE, L1)); // jump to L1
-                n.instructions.add(new VarInsnNode(ALOAD, 0)); // Load this into stack
-                n.instructions.add(new VarInsnNode(FLOAD, 1)); // Load arg 1 into stack
-                n.instructions.add(new VarInsnNode(FLOAD, 2)); // Load arg 2 into stack
-                n.instructions.add(new VarInsnNode(FLOAD, 3)); // Load arg 3 into stack
+                        "(Lnet/minecraft/entity/Entity;FFF)[F", false)); // call GBMethod.getControllingPassenger
+                n.instructions.add(new VarInsnNode(ASTORE, 4)); // Load result into reg
+                n.instructions.add(new VarInsnNode(ALOAD, 0));  // Store this into stack
+                n.instructions.add(new VarInsnNode(ALOAD, 4));  // Store result into stack
+                n.instructions.add(new InsnNode(ICONST_0));          // Load index 0 into array
+                n.instructions.add(new InsnNode(FALOAD));            // Store value into stack
+                n.instructions.add(new VarInsnNode(ALOAD, 4));  // Store result into stack
+                n.instructions.add(new InsnNode(ICONST_1));          // Load index 1 into array
+                n.instructions.add(new InsnNode(FALOAD));            // Store value into stack
+                n.instructions.add(new VarInsnNode(ALOAD, 4));  // Store result into stack
+                n.instructions.add(new InsnNode(ICONST_2));          // Load index 2 into array
+                n.instructions.add(new InsnNode(FALOAD));            // Store value into stack
                 n.instructions.add(new MethodInsnNode(INVOKESPECIAL,
                         "net/minecraft/entity/passive/EntityAnimal",
                         deObf ? obf_travel.deobf : obf_travel.obf,

@@ -19,7 +19,7 @@ public class TamableEntityNBT {
     public static void load(NBTBase nbt, ITamableEntity instance) {
         if(nbt instanceof NBTTagCompound) {
             NBTTagCompound compound = (NBTTagCompound) nbt;
-            if(compound.hasKey("owner") && compound.hasKey("owner_name")) {
+            if(compound.hasKey("ownerMost") && compound.hasKey("ownerLeast") && compound.hasKey("owner_name")) {
                 instance.setOwner(compound.getUniqueId("owner"), compound.getString("owner_name"));
             }
             if(compound.hasKey("attempts")) {

@@ -19,6 +19,11 @@ public class DummyPolarBear extends EntityPolarBear {
         return true;
     }
 
+    @Override
+    protected float getJumpUpwardsMotion() {
+        return 0.84F;
+    }
+
     @Nullable
     @Override
     public Entity getControllingPassenger() {
@@ -28,8 +33,7 @@ public class DummyPolarBear extends EntityPolarBear {
 
     @Override
     public void travel(float strafe, float vertical, float forward) {
-        if(!HBMethod.travel(this, strafe, vertical, forward)) {
-            super.travel(strafe, vertical, forward);
-        }
+        float[] values = HBMethod.travel(this, strafe, vertical, forward);
+        super.travel(values[0], values[1], values[2]);
     }
 }

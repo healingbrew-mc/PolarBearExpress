@@ -46,6 +46,7 @@ public class PlayerPolarBearTameAction {
 
         if(player.getHeldItemMainhand().getItem().getRegistryName().equals(Config.TamingItem)) {
             ITamableEntity tamableEntity = polarBear.getCapability(TamableEntityProvider.TAMABLE_ENTITY_CAPABILITY, null);
+
             if(tamableEntity == null) {
                 return false;
             }
