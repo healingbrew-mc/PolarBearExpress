@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
-@Mod(modid = PolarBearExpress.MODID, version = PolarBearExpress.VERSION)
+@Mod(modid = PolarBearExpress.MODID, version = PolarBearExpress.VERSION, certificateFingerprint = "d0ff4e3ee6e9a9ab7d68a1993bee4674341b3201")
 public class PolarBearExpress
 {
     public static final String MODID = "polarbearexpress";

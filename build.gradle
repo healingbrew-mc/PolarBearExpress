@@ -1,3 +1,5 @@
+import java.nio.file.Paths
+
 buildscript {
     repositories {
         jcenter()
@@ -28,16 +30,16 @@ minecraft {
     runDir = "run"
     mappings = "snapshot_20171003"
 
-    replace "@VERSION@", project.version
+    replace "@VERSION@", project.mod_version
     replaceIn "PolarBearExpress.java"
 }
 
 task signJar(type: SignJar, dependsOn: reobfJar) {
-    inputFile = jar.archiveName
-    outputFile = jar.archiveName
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
 
     keyStore = System.getenv("FMLSIGN_KEYSTORE")
-    alias = "pbx"
+    alias = "signFiles"
     storePass = System.getenv("FMLSIGN_STOREPASS")
     keyPass = System.getenv("FMLSIGN_KEYPASS")
 }
@@ -46,7 +48,7 @@ if(System.getenv("FMLSIGN_KEYSTORE")  != null &&
    System.getenv("FMLSIGN_STOREPASS") != null && 
    System.getenv("FMLSIGN_KEYPASS")   != null) {
     build.dependsOn signJar
-    System.out.println("Enabling signing");
+    System.out.println("Enabling signing")
 }
 
 runClient {
