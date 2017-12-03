@@ -13,6 +13,7 @@ public class TamableEntityNBT {
         }
         compound.setInteger("attempts", instance.getAttempts());
         compound.setFloat("chance", instance.getChance());
+        compound.setBoolean("sitting", instance.getSitting());
         return compound;
     }
 
@@ -27,6 +28,9 @@ public class TamableEntityNBT {
             }
             if(compound.hasKey("chance")) {
                 instance.setChance(compound.getFloat("chance"));
+            }
+            if(compound.hasKey("sitting")) {
+                instance.setSitting(compound.getBoolean("sitting"));
             }
         }
     }

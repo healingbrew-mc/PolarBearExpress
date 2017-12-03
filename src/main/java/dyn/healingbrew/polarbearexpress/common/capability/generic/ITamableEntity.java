@@ -13,6 +13,7 @@ public interface ITamableEntity {
     void incrementAttempt();
     void setChance(float chance);
     void setAttempts(int attempts);
+    void setSitting(boolean sitting);
 
     EntityPlayer getOwner();
     String getName();
@@ -20,4 +21,5 @@ public interface ITamableEntity {
     UUID getUUID();
     float getChance();
     int getAttempts();
+    boolean getSitting();
 }

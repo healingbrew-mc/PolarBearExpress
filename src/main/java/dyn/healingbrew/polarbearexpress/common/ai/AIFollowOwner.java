@@ -65,7 +65,7 @@ public class AIFollowOwner extends EntityAIBase {
             return false;
         } else if (this.tameable.isBeingRidden()) {
             return false;
-        } else if (this.tameable.getLeashed()) {
+        } else if (this.getCapability().getSitting()) {
             return false;
         } else if (this.tameable.getDistanceSq(entitylivingbase) < (double) (this.minDist * this.minDist)) {
             return false;
@@ -79,7 +79,10 @@ public class AIFollowOwner extends EntityAIBase {
      * Returns whether an in-progress EntityAIBase should continue executing
      */
     public boolean shouldContinueExecuting() {
-        return !this.petPathfinder.noPath() && this.tameable.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist) && !this.tameable.getLeashed() && !this.tameable.isBeingRidden();
+        return !this.petPathfinder.noPath() &&
+                this.tameable.getDistanceSq(this.owner) > (double) (this.maxDist * this.maxDist) &&
+                !this.getCapability().getSitting() &&
+                !this.tameable.isBeingRidden();
     }
 
     /**

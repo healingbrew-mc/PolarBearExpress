@@ -14,6 +14,7 @@ public class TamableEntity implements ITamableEntity {
     private float chance = Config.ChancePerAttempt;
     private int attempts;
     private EntityPlayer cachedPlayer = null;
+    private boolean sitting = false;
 
     @Override
     public void setOwner(EntityPlayer player) {
@@ -48,6 +49,11 @@ public class TamableEntity implements ITamableEntity {
     }
 
     @Override
+    public void setSitting(boolean sitting) {
+        this.sitting = sitting;
+    }
+
+    @Override
     public EntityPlayer getOwner() {
         if(cachedPlayer == null) {
             cachedPlayer = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld().getPlayerEntityByUUID(player);
@@ -74,5 +80,10 @@ public class TamableEntity implements ITamableEntity {
     @Override
     public int getAttempts() {
         return this.attempts;
+    }
+
+    @Override
+    public boolean getSitting() {
+        return this.sitting;
     }
 }

@@ -9,7 +9,19 @@ buildscript {
         classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
     }
 }
+
 apply plugin: "net.minecraftforge.gradle.forge"
+
+repositories {
+    maven { // TOP
+        name 'tterrag maven'
+        url "http://maven.tterrag.com/"
+    }
+    maven {
+        name = "CoFH Maven"
+        url = "http://maven.covers1624.net"
+    }
+}
 
 ext.build_rev = 0
 if(System.getenv("BUILD_REV") != null) {
@@ -63,6 +75,8 @@ jar {
 }
 
 dependencies {
+    deobfCompile "cofh:RedstoneFlux:1.12-2.0.0.1:universal"
+    deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11:api"
 }
 
 processResources {

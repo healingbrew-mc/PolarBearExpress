@@ -30,6 +30,8 @@ public class AIListenOwner extends EntityAITarget {
             return false;
         } else if (this.getCapability().getUUID() == null) {
             return false;
+        } else if (this.getCapability().getSitting()) {
+            return false;
         } else {
             EntityLivingBase entitylivingbase = this.getCapability().getOwner();
 

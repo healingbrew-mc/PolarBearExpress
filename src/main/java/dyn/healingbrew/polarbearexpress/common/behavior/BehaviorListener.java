@@ -9,6 +9,7 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -67,6 +68,10 @@ public class BehaviorListener {
             return;
         }
 
+        if(event.getHand() != EnumHand.MAIN_HAND) {
+            return;
+        }
+
         if (event.getTarget() instanceof EntityPolarBear) {
             EntityPolarBear bear = (EntityPolarBear) event.getTarget();
             EntityPlayer player = event.getEntityPlayer();
@@ -79,6 +84,8 @@ public class BehaviorListener {
 
             if (PlayerPolarBearMountAction.doWork(player, bear, false)) {
                 event.setCanceled(PlayerPolarBearMountAction.doWork(player, bear, true));
+            } else if (PlayerPolarBearSitAction.doWork(player, bear, false)) {
+                event.setCanceled(PlayerPolarBearSitAction.doWork(player, bear, true));
             } else if (PlayerPolarBearTameAction.doWork(player, bear, false)) {
                 event.setCanceled(PlayerPolarBearTameAction.doWork(player, bear, true));
             }
