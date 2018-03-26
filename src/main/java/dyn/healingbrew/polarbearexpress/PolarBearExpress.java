@@ -18,7 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
-@Mod(modid = PolarBearExpress.MODID, version = PolarBearExpress.VERSION, certificateFingerprint = "d0ff4e3ee6e9a9ab7d68a1993bee4674341b3201")
+@Mod(modid = PolarBearExpress.MODID, version = PolarBearExpress.VERSION, certificateFingerprint = "ec24659e5fe698bd099dbd6a27ced171932422c5")
 public class PolarBearExpress {
     public static final String MODID = "polarbearexpress";
     public static final String VERSION = "@VERSION@";
